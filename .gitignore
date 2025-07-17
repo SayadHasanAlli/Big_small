@@ -1,0 +1,27 @@
+# Node.js dependencies
+node_modules/
+
+# Logs
+logs
+*.log
+
+# Environment files
+.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Model storage (if any temp or backup files are used)
+model-storage/
+*.bin
+*.h5
+*.weights.json
+
+# Editor-specific
+.vscode/
+.idea/
+
+# Build folders
+dist/
+build/
