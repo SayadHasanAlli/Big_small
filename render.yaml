@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: prediction-backend
+    env: node
+    plan: free
+    branch: main
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: MONGO_URI
+        value: your_mongo_connection_string_here
