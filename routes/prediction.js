@@ -21,6 +21,7 @@ router.get("/", async (req, res) => {
 
     res.json({ prediction: predicted });
   } catch (err) {
+    console.error("Prediction error:", err); // <-- This will show error in Render logs
     res.status(500).json({ error: "Internal server error" });
   }
 });
