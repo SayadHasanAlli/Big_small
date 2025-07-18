@@ -38,7 +38,7 @@ module.exports = async function fetchAndUpdate() {
     const n2 = history.at(-2).num;
     const n3 = history.at(-1).num;
 
-    const predicted = await modelService.predict(n1, n2, n3);
+    const { predicted, confidence } = await modelService.predict(n1, n2, n3);
 
     modelService.addTrainingData(n1, n2, n3, num);
     modelService.trainCounter++;
@@ -53,7 +53,14 @@ module.exports = async function fetchAndUpdate() {
     const isCorrect = predictedBig === actualBig;
 
     try {
-      await NumberEntry.create({ issue, num, predicted });
+      const predictedClass = predicted === "Big" ? 1 : 0;
+
+      await NumberEntry.create({
+        issue,
+        num,
+        predicted: predictedClass,
+        timestamp: new Date(),
+      });
     } catch (e) {
       if (e.code === 11000) {
         console.warn("Duplicate entry, skipping...");
@@ -85,7 +92,11 @@ module.exports = async function fetchAndUpdate() {
     await stats.save();
 
     console.log(
-      `📊 Predicted: ${predicted} | Actual: ${num} | ${isCorrect ? "✅" : "❌"}`
+      `📊 Predicted Number: ${predicted} (${
+        predictedBig ? "Big" : "Small"
+      }) | Actual: ${num} (${actualBig ? "Big" : "Small"}) | ${
+        isCorrect ? "✅" : "❌"
+      }`
     );
   } catch (err) {
     console.error("❌ fetchAndUpdate error:", err);
